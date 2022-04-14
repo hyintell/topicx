@@ -146,14 +146,12 @@ class CETopic:
 
         labels = sorted(list(self.topic_sizes.keys()))
 
-        # Get the top 30 indices and values per row in a sparse c-TF-IDF matrix
         indices = self._top_n_idx_sparse(self.scores, 30)
         scores = self._top_n_values_sparse(self.scores, indices)
         sorted_indices = np.argsort(scores, 1)
         indices = np.take_along_axis(indices, sorted_indices, axis=1)
         scores = np.take_along_axis(scores, sorted_indices, axis=1)
 
-        # Get top 30 words per topic based on c-TF-IDF score
         topics = {label: [(words[word_index], score)
                           if word_index and score > 0
                           else ("", 0.00001)
