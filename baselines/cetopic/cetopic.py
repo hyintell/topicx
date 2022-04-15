@@ -38,7 +38,7 @@ class CETopic:
         self.dim_size = dim_size
         self.umap = None
         if self.dim_size != -1:
-            self.umap = UMAP(n_neighbors=15, n_components=self.dim_size, min_dist=0.0, metric='cosine')
+            self.umap = UMAP(n_neighbors=15, n_components=self.dim_size, min_dist=0.0, metric='cosine', random_state=seed)
         
         # cluster
         self.kmeans = KMeans(self.nr_topics, random_state=seed)
