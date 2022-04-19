@@ -18,7 +18,7 @@ class BERTopicTM(TopicModel):
         
         
     def train(self):
-        self.topics = self.model.fit_transform(self.sentences)
+        self.topics, _ = self.model.fit_transform(self.sentences)
     
     
     def evaluate(self):

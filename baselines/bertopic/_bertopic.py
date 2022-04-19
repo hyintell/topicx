@@ -159,12 +159,10 @@ class BERTopic:
                                              low_memory=self.low_memory)
 
         # HDBSCAN
-        # use KMeans instead of HDBSCAN to fix the number of clusters
-        self.hdbscan_model = KMeans(self.nr_topics)
-#         self.hdbscan_model = hdbscan_model or hdbscan.HDBSCAN(min_cluster_size=self.min_topic_size,
-#                                                               metric='euclidean',
-#                                                               cluster_selection_method='eom',
-#                                                               prediction_data=True)
+        self.hdbscan_model = hdbscan_model or hdbscan.HDBSCAN(min_cluster_size=self.min_topic_size,
+                                                              metric='euclidean',
+                                                              cluster_selection_method='eom',
+                                                              prediction_data=True)
 
         self.topics = None
         self.topic_mapper = None
@@ -296,8 +294,7 @@ class BERTopic:
         umap_embeddings = self._reduce_dimensionality(embeddings, y)
 
         # Cluster UMAP embeddings with HDBSCAN
-#         documents, probabilities = self._cluster_embeddings(umap_embeddings, documents)
-        documents = self._cluster_embeddings(umap_embeddings, documents)
+        documents, probabilities = self._cluster_embeddings(umap_embeddings, documents)
 
         # Sort and Map Topic IDs by their frequency
         if not self.nr_topics:
@@ -306,16 +303,15 @@ class BERTopic:
         # Extract topics by calculating c-TF-IDF
         self._extract_topics(documents)
         
-#         # Reduce topics
-#         if self.nr_topics:
-#             documents = self._reduce_topics(documents)
+        # Reduce topics
+        if self.nr_topics:
+            documents = self._reduce_topics(documents)
 
-#         self._map_representative_docs(original_topics=True)
-#         probabilities = self._map_probabilities(probabilities, original_topics=True)
+        self._map_representative_docs(original_topics=True)
+        probabilities = self._map_probabilities(probabilities, original_topics=True)
         predictions = documents.Topic.to_list()
 
-#         return predictions, probabilities
-        return predictions
+        return predictions, probabilities
 
     def transform(self,
                   documents: Union[str, List[str]],
@@ -376,17 +372,16 @@ class BERTopic:
         umap_embeddings = self.umap_model.transform(embeddings)
         predictions, probabilities = hdbscan.approximate_predict(self.hdbscan_model, umap_embeddings)
 
-#         if self.calculate_probabilities:
-#             probabilities = hdbscan.membership_vector(self.hdbscan_model, umap_embeddings)
-#         else:
-#             probabilities = None
+        if self.calculate_probabilities:
+            probabilities = hdbscan.membership_vector(self.hdbscan_model, umap_embeddings)
+        else:
+            probabilities = None
 
         if self.mapped_topics:
             predictions = self._map_predictions(predictions)
-#             probabilities = self._map_probabilities(probabilities)
+            probabilities = self._map_probabilities(probabilities)
 
-#         return predictions, probabilities
-        return predictions
+        return predictions, probabilities
 
     def topics_over_time(self,
                          docs: List[str],
@@ -1396,17 +1391,16 @@ class BERTopic:
         """
         self.hdbscan_model.fit(umap_embeddings)
         documents['Topic'] = self.hdbscan_model.labels_
-#         probabilities = self.hdbscan_model.probabilities_
+        probabilities = self.hdbscan_model.probabilities_
 
-#         if self.calculate_probabilities:
-#             probabilities = hdbscan.all_points_membership_vectors(self.hdbscan_model)
+        if self.calculate_probabilities:
+            probabilities = hdbscan.all_points_membership_vectors(self.hdbscan_model)
 
         self._update_topic_size(documents)
-#         self._save_representative_docs(documents)
+        self._save_representative_docs(documents)
         self.topic_mapper = TopicMapper(self.hdbscan_model)
         logger.info("Clustered UMAP embeddings with HDBSCAN")
-#         return documents, probabilities
-        return documents
+        return documents, probabilities
 
     def _guided_topic_modeling(self, embeddings: np.ndarray) -> Tuple[List[int], np.array]:
         """ Apply Guided Topic Modeling

@@ -56,7 +56,8 @@ def main():
     print(f'Model {args.topic_model} k: {args.k} td: {td_score} npmi: {npmi_score} cv: {cv_score}')
     
     topics = tm.get_topics()
-    print(f'Topics {topics}')
+    print(f'Output number of topics: {len(topics.keys())}')
+    print(f'Topics: {topics}')
     
 
 def parse_args():
