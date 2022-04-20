@@ -10,11 +10,11 @@ from baselines.zeroshottm import ZeroShotTM
 from baselines.combinedtm import CombinedTM
 from utils import *
 
-import timeit
+# import timeit
 import random
 import numpy as np
-import pandas as pd
-from gensim.models.coherencemodel import CoherenceModel
+# import pandas as pd
+# from gensim.models.coherencemodel import CoherenceModel
 
 import os
 os.environ["TOKENIZERS_PARALLELISM"] = "false"

@@ -3,12 +3,17 @@ This is the official repository of NAACL 2022 paper "*Is Neural Topic Modelling 
 
 Paper is available at [Placeholder](https://google.com).
 
-## How to Run
+## Install Dependencies
 
 ```shell
 conda create -n cluster_topic_model python=3.7 -y
 conda activate cluster_topic_model
 pip install -r requirements.txt
+```
+
+## Run Using Shell
+
+```shell
 bash run_evaluate.sh
 ```
 
@@ -101,6 +106,53 @@ optional arguments:
                         cluster
   --seed SEED           Random seed
 ```
+
+## Run CETopic
+
+Below is an example of how to run CETopic on the BBC dataset. You can choose a word selecting method from `[tfidf_idfi, tfidf_tfi, tfidfi, tfi]`. If you prefer not to reduce the embedding dimensionalities, simply set `dim_size=-1`. You can train the model, get evaluation results and topics:
+
+```python
+from baselines.cetopictm import CETopicTM
+from utils import prepare_dataset
+
+dataset, sentences = prepare_dataset('bbc')
+
+tm = CETopicTM(dataset=dataset, 
+               topic_model='cetopic', 
+               k=5, 
+               dim_size=5, 
+               word_select_method='tfidf_idfi',
+               embedding='princeton-nlp/unsup-simcse-bert-base-uncased', 
+               seed=42)
+
+tm.train()
+td_score, cv_score, npmi_score = tm.evaluate()
+print(f'td: {td_score} npmi: {npmi_score} cv: {cv_score}')
+
+topics = tm.get_topics()
+print(f'Topics: {topics}')
+```
+
+You should expect something similar:
+```python
+td: 0.96 npmi: 0.11889979828579675 cv: 0.7574707739043192
+
+Topics: {
+0: [
+	('tory', 0.010655754552013494), 
+	('labour', 0.010140645139665033), 
+	('election', 0.008794514704281466), 
+	('party', 0.007523648919704865), 
+	('government', 0.006801391630922592), 
+	('plan', 0.00444844822680986), 
+	('minister', 0.003928431285391421), 
+	('leader', 0.0037359746494665725), 
+	('pension', 0.003697165535497612), 
+	('lord', 0.0036023621214819595)
+], ...
+}
+```
+
 
 ## Add New Models
 
