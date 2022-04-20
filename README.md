@@ -1,7 +1,7 @@
 # Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics
 This is the official repository of the NAACL 2022 paper "*Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics*".
 
-Paper is available at [Placeholder](https://google.com).
+Paper is available at [https://openreview.net/pdf?id=UBk6b94uH7](https://openreview.net/pdf?id=UBk6b94uH7). We will update paper soon.
 
 ## Quick Links
 * [Install Dependencies](#install-dependencies)
