@@ -3,12 +3,72 @@ This is the official repository of the NAACL 2022 paper "*Is Neural Topic Modell
 
 Paper is available at [Placeholder](https://google.com).
 
-## Install Dependencies
+## Quick Links
+* [Install Dependencies](#install-dependencies)
+* [Run CETopic](#run-cetopic)
+* [Run Using Shell](#run-using-shell)
+    + [Dataset](#dataset)
+    + [Topic Model](#topic-model)
+    + [Word Selecting Method](#word-selecting-method)
+    + [Pretrained Model](#pretrained-model)
+    + [Arguments](#arguments)
+    + [Examples](#examples)
+ * [Add New Models](#add-new-models)
+ * [Citation](#citation)
+ * [Acknowledgement](#acknowledgement)
+ * [License](#license)
 
+## Install Dependencies
 ```shell
 conda create -n cluster_topic_model python=3.7 -y
 conda activate cluster_topic_model
 pip install -r requirements.txt
+```
+
+## Run CETopic
+
+Below is an example of how to run CETopic on the BBC dataset. You can choose a word selecting method from `[tfidf_idfi, tfidf_tfi, tfidfi, tfi]`. If you prefer not to reduce the embedding dimensionalities using UMAP, simply set `dim_size=-1`. You can train the model, get evaluation results and topics:
+
+```python
+from baselines.cetopictm import CETopicTM
+from utils import prepare_dataset
+
+dataset, sentences = prepare_dataset('bbc')
+
+tm = CETopicTM(dataset=dataset, 
+               topic_model='cetopic', 
+               num_topics=5, 
+               dim_size=5, 
+               word_select_method='tfidf_idfi',
+               embedding='princeton-nlp/unsup-simcse-bert-base-uncased', 
+               seed=42)
+
+tm.train()
+td_score, cv_score, npmi_score = tm.evaluate()
+print(f'td: {td_score} npmi: {npmi_score} cv: {cv_score}')
+
+topics = tm.get_topics()
+print(f'Topics: {topics}')
+```
+
+You should expect something similar:
+```python
+td: 0.96 npmi: 0.11889979828579675 cv: 0.7574707739043192
+
+Topics: {
+0: [
+    ('tory', 0.010655754552013494), 
+    ('labour', 0.010140645139665033), 
+    ('election', 0.008794514704281466), 
+    ('party', 0.007523648919704865), 
+    ('government', 0.006801391630922592), 
+    ('plan', 0.00444844822680986), 
+    ('minister', 0.003928431285391421), 
+    ('leader', 0.0037359746494665725), 
+    ('pension', 0.003697165535497612), 
+    ('lord', 0.0036023621214819595)
+  ], ...
+}
 ```
 
 ## Run Using Shell
@@ -31,6 +91,29 @@ If you use `cetopic`, you can also choose a word selecting method from `[tfidf_i
 
 ### Pretrained Model
 You can choose a pretrained model such as `princeton-nlp/unsup-simcse-bert-base-uncased` or `bert-base-uncased` from [SimCSE](https://github.com/princeton-nlp/SimCSE) or [HuggingFace](https://huggingface.co/models).
+
+### Arguments
+```
+usage: main.py [-h] [--topic_model TOPIC_MODEL] [--dataset DATASET] 
+[--pretrained_model PRETRAINED_MODEL] [--num_topics NUM_TOPICS] 
+[--dim_size DIM_SIZE] [--word_select_method WORD_SELECT_METHOD] [--seed SEED]
+
+Cluster Contextual Embeddings for Topic Models
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --topic_model TOPIC_MODEL
+                        Topic model to run experiments
+  --dataset DATASET     Datasets to run experiments
+  --pretrained_model PRETRAINED_MODEL
+                        Pretrained language model
+  --num_topics NUM_TOPICS
+                        Topic number
+  --dim_size DIM_SIZE   Embedding dimension size to reduce to
+  --word_select_method WORD_SELECT_METHOD
+                        Word selecting methods to select words from each cluster
+  --seed SEED           Random seed
+```
 
 ### Examples
 
@@ -83,76 +166,6 @@ python main.py\
     --pretrained_model ${PRETRAINED_MODEL}\
 ```
 
-### Arguments
-```
-usage: main.py [-h] [--topic_model TOPIC_MODEL] [--dataset DATASET] 
-[--pretrained_model PRETRAINED_MODEL] [--num_topics NUM_TOPICS] 
-[--dim_size DIM_SIZE] [--word_select_method WORD_SELECT_METHOD] [--seed SEED]
-
-Cluster Contextual Embeddings for Topic Models
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --topic_model TOPIC_MODEL
-                        Topic model to run experiments
-  --dataset DATASET     Datasets to run experiments
-  --pretrained_model PRETRAINED_MODEL
-                        Pretrained language model
-  --num_topics NUM_TOPICS
-                        Topic number
-  --dim_size DIM_SIZE   Embedding dimension size to reduce to
-  --word_select_method WORD_SELECT_METHOD
-                        Word selecting methods to select words from each cluster
-  --seed SEED           Random seed
-```
-
-## Run CETopic
-
-Below is an example of how to run CETopic on the BBC dataset. You can choose a word selecting method from `[tfidf_idfi, tfidf_tfi, tfidfi, tfi]`. If you prefer not to reduce the embedding dimensionalities, simply set `dim_size=-1`. You can train the model, get evaluation results and topics:
-
-```python
-from baselines.cetopictm import CETopicTM
-from utils import prepare_dataset
-
-dataset, sentences = prepare_dataset('bbc')
-
-tm = CETopicTM(dataset=dataset, 
-               topic_model='cetopic', 
-               num_topics=5, 
-               dim_size=5, 
-               word_select_method='tfidf_idfi',
-               embedding='princeton-nlp/unsup-simcse-bert-base-uncased', 
-               seed=42)
-
-tm.train()
-td_score, cv_score, npmi_score = tm.evaluate()
-print(f'td: {td_score} npmi: {npmi_score} cv: {cv_score}')
-
-topics = tm.get_topics()
-print(f'Topics: {topics}')
-```
-
-You should expect something similar:
-```python
-td: 0.96 npmi: 0.11889979828579675 cv: 0.7574707739043192
-
-Topics: {
-0: [
-    ('tory', 0.010655754552013494), 
-    ('labour', 0.010140645139665033), 
-    ('election', 0.008794514704281466), 
-    ('party', 0.007523648919704865), 
-    ('government', 0.006801391630922592), 
-    ('plan', 0.00444844822680986), 
-    ('minister', 0.003928431285391421), 
-    ('leader', 0.0037359746494665725), 
-    ('pension', 0.003697165535497612), 
-    ('lord', 0.0036023621214819595)
-  ], ...
-}
-```
-
-
 ## Add New Models
 
 To add new topic models, you can inherit the base class `TopicModel` and implement your own `train()`, `evaluate()`, and `get_topics()` functions:
@@ -177,11 +190,13 @@ class TopicModel:
 ## Citation
 
 If our research helps you, please kindly cite our paper:
-```
-<Placeholder>
-```
-```
-<Placeholder>
+```bibtex
+@inproceedings{zhang2022neuraltopic,
+   title={Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics},
+   author={Zhang, Zihan and Fang, Meng and Chen, Ling and Namazi-Rad, Mohammad-Reza},
+   booktitle={North American Association for Computational Linguistics (NAACL)},
+   year={2022}
+}
 ```
 
 ## Acknowledgement
