@@ -2,10 +2,10 @@
 
 class TopicModel:
 
-    def __init__(self, dataset, topic_model, k):
+    def __init__(self, dataset, topic_model, num_topics):
         self.dataset = dataset
         self.topic_model = topic_model
-        self.k = k
+        self.num_topics = num_topics
         
         
     def train(self):

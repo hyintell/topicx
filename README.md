@@ -1,5 +1,5 @@
 # Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics
-This is the official repository of NAACL 2022 paper "*Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics*".
+This is the official repository of the NAACL 2022 paper "*Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics*".
 
 Paper is available at [Placeholder](https://google.com).
 
@@ -46,7 +46,7 @@ PRETRAINED_MODEL='princeton-nlp/unsup-simcse-bert-base-uncased'
 python main.py\
     --topic_model ${TOPIC_MODEL}\
     --dataset ${DATASET}\
-    --k 5\
+    --num_topics 5\
     --dim_size 5\
     --word_select_method ${WORD_SELECT_METHOD}\
     --pretrained_model ${PRETRAINED_MODEL}\
@@ -64,7 +64,7 @@ PRETRAINED_MODEL='bert-base-uncased'
 python main.py\
     --topic_model ${TOPIC_MODEL}\
     --dataset ${DATASET}\
-    --k 50\
+    --num_topics 50\
     --pretrained_model ${PRETRAINED_MODEL}\
 ```
 
@@ -79,16 +79,15 @@ PRETRAINED_MODEL='roberta-base'
 python main.py\
     --topic_model ${TOPIC_MODEL}\
     --dataset ${DATASET}\
-    --k 75\
+    --num_topics 75\
     --pretrained_model ${PRETRAINED_MODEL}\
 ```
 
 ### Arguments
 ```
-usage: main.py [-h] [--topic_model TOPIC_MODEL] [--dataset DATASET]
-               [--pretrained_model PRETRAINED_MODEL] [--k K]
-               [--dim_size DIM_SIZE] [--word_select_method WORD_SELECT_METHOD]
-               [--seed SEED]
+usage: main.py [-h] [--topic_model TOPIC_MODEL] [--dataset DATASET] 
+[--pretrained_model PRETRAINED_MODEL] [--num_topics NUM_TOPICS] 
+[--dim_size DIM_SIZE] [--word_select_method WORD_SELECT_METHOD] [--seed SEED]
 
 Cluster Contextual Embeddings for Topic Models
 
@@ -99,11 +98,11 @@ optional arguments:
   --dataset DATASET     Datasets to run experiments
   --pretrained_model PRETRAINED_MODEL
                         Pretrained language model
-  --k K                 Topic number
+  --num_topics NUM_TOPICS
+                        Topic number
   --dim_size DIM_SIZE   Embedding dimension size to reduce to
   --word_select_method WORD_SELECT_METHOD
-                        Word selecting methods to select words from each
-                        cluster
+                        Word selecting methods to select words from each cluster
   --seed SEED           Random seed
 ```
 
@@ -119,7 +118,7 @@ dataset, sentences = prepare_dataset('bbc')
 
 tm = CETopicTM(dataset=dataset, 
                topic_model='cetopic', 
-               k=5, 
+               num_topics=5, 
                dim_size=5, 
                word_select_method='tfidf_idfi',
                embedding='princeton-nlp/unsup-simcse-bert-base-uncased', 
@@ -160,10 +159,10 @@ To add new topic models, you can inherit the base class `TopicModel` and impleme
 
 ```python
 class TopicModel:
-    def __init__(self, dataset, topic_model, k):
+    def __init__(self, dataset, topic_model, num_topics):
         self.dataset = dataset
         self.topic_model = topic_model
-        self.k = k
+        self.num_topics = num_topics
         
     def train(self):
         raise NotImplementedError("Train function has not been defined!")

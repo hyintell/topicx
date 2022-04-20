@@ -7,9 +7,9 @@ from gensim.models.coherencemodel import CoherenceModel
 
 
 class CETopicTM(TopicModel):
-    def __init__(self, dataset, topic_model, k, dim_size, word_select_method, embedding, seed):
-        super().__init__(dataset, topic_model, k)
-        print(f'Initialize CETopicTM with k={k}, embedding={embedding}')
+    def __init__(self, dataset, topic_model, num_topics, dim_size, word_select_method, embedding, seed):
+        super().__init__(dataset, topic_model, num_topics)
+        print(f'Initialize CETopicTM with num_topics={num_topics}, embedding={embedding}')
         self.dim_size = dim_size
         self.word_select_method = word_select_method
         self.embedding = embedding
@@ -26,13 +26,13 @@ class CETopicTM(TopicModel):
             self.simCSE_embeddings = simCSE_model.encode(self.sentences)
             self.simCSE_embeddings = self.simCSE_embeddings.cpu().detach().numpy()
             print(self.simCSE_embeddings.shape)
-            self.model = CETopic(nr_topics=k, 
+            self.model = CETopic(nr_topics=num_topics, 
                                  dim_size=self.dim_size, 
                                  word_select_method=self.word_select_method, 
                                  seed=self.seed)
         else:
             self.model = CETopic(embedding_model=embedding, 
-                                 nr_topics=k, 
+                                 nr_topics=num_topics, 
                                  dim_size=self.dim_size, 
                                  word_select_method=self.word_select_method, 
                                  seed=self.seed)        

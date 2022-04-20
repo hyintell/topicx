@@ -32,25 +32,25 @@ def main():
     if args.topic_model == 'cetopic':
         tm = CETopicTM(dataset=dataset, 
                        topic_model=args.topic_model, 
-                       k=args.k, 
+                       num_topics=args.num_topics, 
                        dim_size=args.dim_size, 
                        word_select_method=args.word_select_method,
                        embedding=args.pretrained_model, 
                        seed=args.seed)
     elif args.topic_model == 'lda':
-        tm = LDATM(dataset, args.topic_model, args.k)
+        tm = LDATM(dataset, args.topic_model, args.num_topics)
     elif args.topic_model == 'prodlda':
-        tm = ProdLDATM(dataset, args.topic_model, args.k)
+        tm = ProdLDATM(dataset, args.topic_model, args.num_topics)
     elif args.topic_model == 'combinedtm':
-        tm = CombinedTM(dataset, args.topic_model, args.k, args.pretrained_model)
+        tm = CombinedTM(dataset, args.topic_model, args.num_topics, args.pretrained_model)
     elif args.topic_model == 'zeroshottm':
-        tm = ZeroShotTM(dataset, args.topic_model, args.k, args.pretrained_model)
+        tm = ZeroShotTM(dataset, args.topic_model, args.num_topics, args.pretrained_model)
     elif args.topic_model == 'bertopic':
-        tm = BERTopicTM(dataset, args.topic_model, args.k, args.pretrained_model)
+        tm = BERTopicTM(dataset, args.topic_model, args.num_topics, args.pretrained_model)
     
     tm.train()
     td_score, cv_score, npmi_score = tm.evaluate()
-    print(f'Model {args.topic_model} k: {args.k} td: {td_score} npmi: {npmi_score} cv: {cv_score}')
+    print(f'Model {args.topic_model} num_topics: {args.num_topics} td: {td_score} npmi: {npmi_score} cv: {cv_score}')
     
     topics = tm.get_topics()
     print(f'Topics: {topics}')
@@ -62,7 +62,7 @@ def parse_args():
     parser.add_argument("--topic_model", type=str, default='lda', help='Topic model to run experiments')
     parser.add_argument("--dataset", type=str, default='20ng', help='Datasets to run experiments')
     parser.add_argument("--pretrained_model", type=str, default='bert-base-uncased', help='Pretrained language model')
-    parser.add_argument("--k", type=int, default=10, help='Topic number')
+    parser.add_argument("--num_topics", type=int, default=10, help='Topic number')
     parser.add_argument("--dim_size", type=int, default=-1, help='Embedding dimension size to reduce to')
     parser.add_argument("--word_select_method", type=str, default='tfidf_idfi', help='Word selecting methods to select words from each cluster')
     parser.add_argument("--seed", type=int, default=42, help='Random seed')

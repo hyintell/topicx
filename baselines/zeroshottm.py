@@ -5,11 +5,11 @@ from octis.evaluation_metrics.coherence_metrics import Coherence
 
 
 class ZeroShotTM(TopicModel):
-    def __init__(self, dataset, topic_model, k, embedding):
-        super().__init__(dataset, topic_model, k)
-        print(f'Initialize ZeroShotTM with k={k}, embedding={embedding}')
+    def __init__(self, dataset, topic_model, num_topics, embedding):
+        super().__init__(dataset, topic_model, num_topics)
+        print(f'Initialize ZeroShotTM with num_topics={num_topics}, embedding={embedding}')
         self.embedding = embedding
-        self.model = CTM(num_topics=k, inference_type='zeroshot', bert_model=embedding)
+        self.model = CTM(num_topics=num_topics, inference_type='zeroshot', bert_model=embedding)
         
     
     def train(self):

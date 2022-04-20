@@ -6,15 +6,15 @@ from gensim.models.coherencemodel import CoherenceModel
 
 
 class BERTopicTM(TopicModel):
-    def __init__(self, dataset, topic_model, k, embedding):
-        super().__init__(dataset, topic_model, k)
-        print(f'Initialize BERTopicTM with k={k}, embedding={embedding}')
+    def __init__(self, dataset, topic_model, num_topics, embedding):
+        super().__init__(dataset, topic_model, num_topics)
+        print(f'Initialize BERTopicTM with num_topics={num_topics}, embedding={embedding}')
         self.embedding = embedding
         
         # make sentences and token_lists
         token_lists = self.dataset.get_corpus()
         self.sentences = [' '.join(text_list) for text_list in token_lists]
-        self.model = BERTopic(embedding_model=embedding, nr_topics=k)     
+        self.model = BERTopic(embedding_model=embedding, nr_topics=num_topics)     
         
         
     def train(self):

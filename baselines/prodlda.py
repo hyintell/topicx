@@ -5,10 +5,10 @@ from octis.evaluation_metrics.coherence_metrics import Coherence
 
 
 class ProdLDATM(TopicModel):
-    def __init__(self, dataset, topic_model, k):
-        super().__init__(dataset, topic_model, k)
-        print(f'Initialize ProdLDA with k={k}')
-        self.model = ProdLDA(num_topics=k)
+    def __init__(self, dataset, topic_model, num_topics):
+        super().__init__(dataset, topic_model, num_topics)
+        print(f'Initialize ProdLDA with num_topics={num_topics}')
+        self.model = ProdLDA(num_topics=num_topics)
         
         
     def train(self):
