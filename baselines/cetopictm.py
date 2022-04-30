@@ -3,6 +3,7 @@ from baselines.cetopic import CETopic
 import pandas as pd
 from simcse import SimCSE
 import gensim.corpora as corpora
+from flair.embeddings import TransformerDocumentEmbeddings
 from gensim.models.coherencemodel import CoherenceModel
 
 
@@ -18,31 +19,17 @@ class CETopicTM(TopicModel):
         # make sentences and token_lists
         token_lists = self.dataset.get_corpus()
         self.sentences = [' '.join(text_list) for text_list in token_lists]
-
-        # use SimCSE
-        self.simCSE_embeddings = None
-        if 'simcse' in embedding.lower():
-            simCSE_model = SimCSE(embedding)
-            self.simCSE_embeddings = simCSE_model.encode(self.sentences)
-            self.simCSE_embeddings = self.simCSE_embeddings.cpu().detach().numpy()
-            print(self.simCSE_embeddings.shape)
-            self.model = CETopic(nr_topics=num_topics, 
-                                 dim_size=self.dim_size, 
-                                 word_select_method=self.word_select_method, 
-                                 seed=self.seed)
-        else:
-            self.model = CETopic(embedding_model=embedding, 
-                                 nr_topics=num_topics, 
-                                 dim_size=self.dim_size, 
-                                 word_select_method=self.word_select_method, 
-                                 seed=self.seed)        
+        
+        embedding_model = TransformerDocumentEmbeddings(embedding)
+        self.model = CETopic(embedding_model=embedding_model,
+                             nr_topics=num_topics, 
+                             dim_size=self.dim_size, 
+                             word_select_method=self.word_select_method, 
+                             seed=self.seed)
     
     
     def train(self):
-        if self.simCSE_embeddings is not None:
-            self.topics = self.model.fit_transform(self.sentences, self.simCSE_embeddings)
-        else:
-            self.topics = self.model.fit_transform(self.sentences)
+        self.topics = self.model.fit_transform(self.sentences)
     
     
     def evaluate(self):

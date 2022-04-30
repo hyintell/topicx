@@ -2,6 +2,7 @@ from baselines.topic_model import TopicModel
 from baselines.bertopic import BERTopic
 import pandas as pd
 import gensim.corpora as corpora
+from flair.embeddings import TransformerDocumentEmbeddings
 from gensim.models.coherencemodel import CoherenceModel
 
 
@@ -14,7 +15,8 @@ class BERTopicTM(TopicModel):
         # make sentences and token_lists
         token_lists = self.dataset.get_corpus()
         self.sentences = [' '.join(text_list) for text_list in token_lists]
-        self.model = BERTopic(embedding_model=embedding, nr_topics=num_topics)     
+        embedding_model = TransformerDocumentEmbeddings(embedding)
+        self.model = BERTopic(embedding_model=embedding_model, nr_topics=num_topics)     
         
         
     def train(self):

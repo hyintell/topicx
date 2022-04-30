@@ -33,22 +33,22 @@ def select_backend(embedding_model,
 
     # Flair word embeddings
     if "flair" in str(type(embedding_model)):
-        from bertopic.backend._flair import FlairBackend
+        from ._flair import FlairBackend
         return FlairBackend(embedding_model)
 
     # Spacy embeddings
     if "spacy" in str(type(embedding_model)):
-        from bertopic.backend._spacy import SpacyBackend
+        from ._spacy import SpacyBackend
         return SpacyBackend(embedding_model)
 
     # Gensim embeddings
     if "gensim" in str(type(embedding_model)):
-        from bertopic.backend._gensim import GensimBackend
+        from ._gensim import GensimBackend
         return GensimBackend(embedding_model)
 
     # USE embeddings
     if "tensorflow" and "saved_model" in str(type(embedding_model)):
-        from bertopic.backend._use import USEBackend
+        from ._use import USEBackend
         return USEBackend(embedding_model)
 
     # Sentence Transformer embeddings

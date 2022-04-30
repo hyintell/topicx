@@ -28,7 +28,6 @@ def main():
     dataset, sentences = prepare_dataset(args.dataset)
     print(f'Using dataset: {args.dataset}, number of documents: {len(sentences)}')
     
-    
     if args.topic_model == 'cetopic':
         tm = CETopicTM(dataset=dataset, 
                        topic_model=args.topic_model, 

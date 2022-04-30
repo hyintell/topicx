@@ -6,7 +6,7 @@ def select_backend(embedding_model):
 
     # Flair word embeddings
     if "flair" in str(type(embedding_model)):
-        from bertopic.backend._flair import FlairBackend
+        from ._flair import FlairBackend
         return FlairBackend(embedding_model)
 
     # Create a Sentence Transformer model based on a string
