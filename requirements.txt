@@ -4,3 +4,4 @@ hdbscan
 simcse==0.4
 plotly
 flair
+gensim
