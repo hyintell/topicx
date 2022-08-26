@@ -7,7 +7,7 @@ def prepare_dataset(dataset_name):
     if dataset_name == '20ng':
         dataset.fetch_dataset('20NewsGroup')
     elif dataset_name == 'bbc':
-        dataset.fetch_dataset('BBC_news')
+        dataset.fetch_dataset('BBC_News')
     elif dataset_name == 'm10':
         dataset.fetch_dataset('M10')
         
