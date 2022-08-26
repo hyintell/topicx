@@ -1,7 +1,7 @@
 # Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics
 This is the official repository of the NAACL 2022 paper "*Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics*".
 
-Paper is available at [https://arxiv.org/abs/2204.09874](https://arxiv.org/abs/2204.09874). 
+Paper is available at [https://aclanthology.org/2022.naacl-main.285/](https://aclanthology.org/2022.naacl-main.285/). 
 
 ## Quick Links
 * [Install Dependencies](#install-dependencies)
@@ -191,11 +191,21 @@ class TopicModel:
 
 If our research helps you, please kindly cite our paper:
 ```bibtex
-@inproceedings{zhang2022neuraltopic,
-   title={Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics},
-   author={Zhang, Zihan and Fang, Meng and Chen, Ling and Namazi-Rad, Mohammad-Reza},
-   booktitle={North American Association for Computational Linguistics (NAACL)},
-   year={2022}
+@inproceedings{zhang-etal-2022-neural,
+    title = "Is Neural Topic Modelling Better than Clustering? An Empirical Study on Clustering with Contextual Embeddings for Topics",
+    author = "Zhang, Zihan  and
+      Fang, Meng  and
+      Chen, Ling  and
+      Namazi Rad, Mohammad Reza",
+    booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+    month = jul,
+    year = "2022",
+    address = "Seattle, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.naacl-main.285",
+    doi = "10.18653/v1/2022.naacl-main.285",
+    pages = "3886--3893",
+    abstract = "Recent work incorporates pre-trained word embeddings such as BERT embeddings into Neural Topic Models (NTMs), generating highly coherent topics. However, with high-quality contextualized document representations, do we really need sophisticated neural models to obtain coherent and interpretable topics? In this paper, we conduct thorough experiments showing that directly clustering high-quality sentence embeddings with an appropriate word selecting method can generate more coherent and diverse topics than NTMs, achieving also higher efficiency and simplicity.",
 }
 ```
 
