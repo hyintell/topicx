@@ -72,7 +72,6 @@ class CETopicTM(TopicModel):
         vectorizer = self.model.vectorizer_model
         analyzer = vectorizer.build_analyzer()
 
-        words = vectorizer.get_feature_names()
         tokens = [analyzer(doc) for doc in cleaned_docs]
         dictionary = corpora.Dictionary(tokens)
         corpus = [dictionary.doc2bow(token) for token in tokens]
